@@ -1,29 +1,29 @@
 import java.util.*;
 
 /**
- * UseCase1AirportParkingSystem
- * Parking lot management using Open Addressing (Linear Probing).
+ * UseCase3StreetParkingApp
+ * Simulates a street parking system using open addressing with linear probing.
  */
 
-class ParkingSpot {
+class StreetParkingSpot {
 
     String licensePlate;
     long entryTime;
 
-    public ParkingSpot(String licensePlate) {
+    public StreetParkingSpot(String licensePlate) {
         this.licensePlate = licensePlate;
         this.entryTime = System.currentTimeMillis();
     }
 }
 
-public class ParkingLotManagement {
+public class ParkingLotManagement{
 
-    private ParkingSpot[] parkingLot;
+    private StreetParkingSpot[] parkingLot;
     private int capacity;
 
     public ParkingLotManagement(int capacity) {
         this.capacity = capacity;
-        parkingLot = new ParkingSpot[capacity];
+        parkingLot = new StreetParkingSpot[capacity];
     }
 
     // hash function
@@ -31,7 +31,7 @@ public class ParkingLotManagement {
         return Math.abs(licensePlate.hashCode()) % capacity;
     }
 
-    // park vehicle using linear probing
+    // park vehicle
     public void parkVehicle(String licensePlate) {
 
         int index = hash(licensePlate);
@@ -42,14 +42,14 @@ public class ParkingLotManagement {
             probes++;
         }
 
-        parkingLot[index] = new ParkingSpot(licensePlate);
+        parkingLot[index] = new StreetParkingSpot(licensePlate);
 
         System.out.println("Vehicle " + licensePlate +
-                " parked at spot #" + index +
+                " parked at street spot #" + index +
                 " (" + probes + " probes)");
     }
 
-    // vehicle exit
+    // exit vehicle
     public void exitVehicle(String licensePlate) {
 
         int index = hash(licensePlate);
@@ -64,7 +64,7 @@ public class ParkingLotManagement {
                 parkingLot[index] = null;
 
                 System.out.println("Vehicle " + licensePlate +
-                        " exited from spot #" + index +
+                        " left spot #" + index +
                         " | Duration: " + duration + " seconds");
 
                 return;
@@ -73,15 +73,15 @@ public class ParkingLotManagement {
             index = (index + 1) % capacity;
         }
 
-        System.out.println("Vehicle not found.");
+        System.out.println("Vehicle not found in street parking.");
     }
 
-    // statistics
+    // show parking usage
     public void getStatistics() {
 
         int occupied = 0;
 
-        for (ParkingSpot spot : parkingLot) {
+        for (StreetParkingSpot spot : parkingLot) {
             if (spot != null) {
                 occupied++;
             }
@@ -89,7 +89,7 @@ public class ParkingLotManagement {
 
         double occupancy = ((double) occupied / capacity) * 100;
 
-        System.out.println("\nParking Statistics:");
+        System.out.println("\nStreet Parking Statistics:");
         System.out.println("Total Spots: " + capacity);
         System.out.println("Occupied Spots: " + occupied);
         System.out.println("Occupancy Rate: " + occupancy + "%");
@@ -97,13 +97,13 @@ public class ParkingLotManagement {
 
     public static void main(String[] args) {
 
-        ParkingLotManagement parking = new ParkingLotManagement(500);
+        ParkingLotManagement parking = new ParkingLotManagement(100);
 
-        parking.parkVehicle("ABC-1234");
-        parking.parkVehicle("ABC-1235");
-        parking.parkVehicle("XYZ-9999");
+        parking.parkVehicle("TN01AB1234");
+        parking.parkVehicle("TN02CD5678");
+        parking.parkVehicle("TN03XY9999");
 
-        parking.exitVehicle("ABC-1234");
+        parking.exitVehicle("TN01AB1234");
 
         parking.getStatistics();
     }
